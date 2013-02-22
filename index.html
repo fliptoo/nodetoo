@@ -27,32 +27,247 @@
         </ul>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <p><a href="http://travis-ci.org/twitter/typeahead.js"><img src="https://secure.travis-ci.org/twitter/typeahead.js.png?branch=master" alt="build status"></a></p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<h1><a href="http://twitter.github.com/typeahead.js">typeahead.js</a></h1>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>Inspired by <a href="https://twitter.com">twitter.com</a>'s autocomplete search functionality, typeahead.js is a fast and <a href="#features">fully-featured</a> autocomplete library.</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>Getting Started</h2>
 
-<h3>Designer Templates</h3>
+<p>typeahead.js consists of <em>typeahead.js</em> and <em>typeahead.css</em>. How you acquire those files is up to you.</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ul>
+<li>
+<a href="http://twitter.github.com/typeahead.js/releases/latest/typeahead.js.zip">Download zipball of latest release</a>.</li>
+<li>Download latest <a href="http://twitter.github.com/typeahead.js/releases/latest/typeahead.js">typeahead.js</a> and <a href="http://twitter.github.com/typeahead.js/releases/latest/typeahead.css">typeahead.css</a> individually.</li>
+</ul><p><strong>Note:</strong> typeahead.js has a dependency on <a href="http://jquery.com/">jQuery</a> 1.9+, it must be loaded before <em>typeahead.js</em>.</p>
 
-<h3>Rather Drive Stick?</h3>
+<h2>Features</h2>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<li>Displays suggestions to end-users as they type</li>
+<li>Shows top suggestion as a hint (i.e. background text)</li>
+<li>Works with hardcoded data as well as remote data</li>
+<li>Rate-limits network requests to lighten the load</li>
+<li>Allows for suggestions to be drawn from multiple datasets</li>
+<li>Supports customized templates for suggestions</li>
+<li>Plays nice with RTL languages and input method editors</li>
+</ul><h2>Why not use X?</h2>
 
-<h3>Authors and Contributors</h3>
+<p>At the time Twitter was looking to implement a typeahead, there wasn't a solution that allowed for prefetching data, searching that data on the client, and then falling back to the server. It's optimized for quickly indexing and searching large datasets on the client. That allows for sites without datacenters on every continent to provide a consistent level of performance for all their users. It plays nicely with Right-To-Left (RTL) languages and Input Method Editors (IMEs). We also needed something instrumented for comprehensive analytics in order to optimize relevance through A/B testing. Although logging and analytics are not currently included, it's something we may add in the future.</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<h2>Usage</h2>
 
-<h3>Support or Contact</h3>
+<h3>API</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<h4>jQuery#typeahead(datasets)</h4>
+
+<p>Turns any <code>input[type="text"]</code> element into a typeahead. <code>datasets</code> is expected to be a single <a href="#datasets">dataset</a> or an array of datasets.</p>
+
+<div class="highlight"><pre><span class="c1">// single dataset</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'input.typeahead-devs'</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">({</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">'accounts'</span><span class="p">,</span>
+  <span class="nx">local</span><span class="o">:</span> <span class="p">[</span><span class="s1">'timtrueman'</span><span class="p">,</span> <span class="s1">'JakeHarding'</span><span class="p">,</span> <span class="s1">'vskarich'</span><span class="p">]</span>
+<span class="p">});</span>
+
+<span class="c1">// multiple datasets</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'input.twitter-search'</span><span class="p">).</span><span class="nx">typeahead</span><span class="p">([</span>
+  <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">'accounts'</span><span class="p">,</span>
+    <span class="nx">prefetch</span><span class="o">:</span> <span class="s1">'https://twitter.com/network.json'</span><span class="p">,</span>
+    <span class="nx">remote</span><span class="o">:</span> <span class="s1">'https://twitter.com/accounts?q=%QUERY'</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">'trends'</span><span class="p">,</span>
+    <span class="nx">prefetch</span><span class="o">:</span> <span class="s1">'https://twitter.com/trends.json'</span>
+  <span class="p">}</span>
+<span class="p">]);</span>
+</pre></div>
+
+<h4>jQuery.fn.typeahead.configureTransport(options)</h4>
+
+<p>Configures the transport component that will be used by typeaheads initialized with the <code>remote</code> property set. Once <code>jQuery#typeahead</code> is called, this function will not be accessible. Refer to <a href="#transport">Transport</a> for an overview of the transport component along with the details of the configurable options.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">typeahead</span><span class="p">.</span><span class="nx">configureTransport</span><span class="p">({</span>
+  <span class="nx">debounce</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">maxConcurrentRequests</span><span class="o">:</span> <span class="mi">6</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>Datasets</h3>
+
+<p>Datasets are objects which define the sets of data that hydrate suggestions. Given a query, a typeahead instance will inspect its backing datasets and display relevant suggestions to the end-user. Below are the options available for configuring a dataset.</p>
+
+<ul>
+<li><p><code>name</code> - The string used to identify the dataset.</p></li>
+<li><p><code>limit</code> - The max number of suggestions from the dataset to display for a given query. Defaults to <code>5</code>.</p></li>
+<li><p><code>template</code> - The template used to render suggestions. If not provided, suggestions will render as their value contained in a <code>&lt;p&gt;</code> element (i.e. <code>&lt;p&gt;value&lt;/p&gt;</code>).</p></li>
+<li><p><code>engine</code> - The template engine used to compile/render <code>template</code>. Any engine can use used as long as it adheres to the <a href="#template-engine-compatibility">expected API</a>. <strong>Required</strong> if <code>template</code> is set.</p></li>
+<li><p><code>local</code> - An array of <a href="#datums">datums</a>.</p></li>
+<li><p><code>prefetch</code> - A URL to a JSON file containing an array of datums.</p></li>
+<li><p><code>remote</code> - A URL to fetch suggestions from when the data provided by <code>local</code> and <code>prefetch</code> is insufficient for a given query. If the URL contains the wildcard configurable through the [transport options][transport-options], said wildcard will be replaced with the end-user's query before the request is made.</p></li>
+</ul><h3>Datums</h3>
+
+<p>Datums are the individual units that compose datasets. The canonical form of a datum is an object with a <code>value</code> property and a <code>tokens</code> property. <code>value</code> is the string that represents the underlying value of the datum and <code>tokens</code> is a collection of strings that aid typeahead.js in matching datums with a given query.</p>
+
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="s1">'@JakeHarding'</span><span class="p">,</span>
+  <span class="nx">tokens</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Jake'</span><span class="p">,</span> <span class="s1">'Harding'</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>For ease of use, datums can also be represented as a string. Strings found in place of datum objects are converted to a datum object whose value is the found string and with tokens equal to the value split by whitespace.</p>
+
+<p>When datums are rendered as suggestions, the datum object is the context passed to the template engine. This means if you include any arbitrary properties in datum objects, those properties will be available to the template used to render suggestions.</p>
+
+<div class="highlight"><pre><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"{{profileImageUrl}}"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>{{name}}<span class="nt">&lt;/strong&gt;</span><span class="ni">&amp;nbsp;</span>{{value}}<span class="nt">&lt;/p&gt;</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nx">value</span><span class="o">:</span> <span class="s1">'@JakeHarding'</span><span class="p">,</span>
+  <span class="nx">tokens</span><span class="o">:</span> <span class="p">[</span><span class="s1">'Jake'</span><span class="p">,</span> <span class="s1">'Harding'</span><span class="p">],</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s1">'Jake Harding'</span><span class="p">,</span>
+  <span class="nx">profileImageUrl</span><span class="o">:</span> <span class="s1">'https://twitter.com/JakeHaridng/profile_img'</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>Transport</h3>
+
+<p>The transport component is a singleton used by all typeaheads initialized with the <code>remote</code> property set. Its primary purpose is to rate-limit network requests and to manage the number of concurrent requests. Below are the options available for configuring the transport component.</p>
+
+<ul>
+<li><p><code>rateLimitFn</code> - The function that will be used for rate-limiting network requests. Can be either <code>debounce</code> or <code>throttle</code>. Defaults to <code>debounce</code>.</p></li>
+<li><p><code>wait</code> - The time interval in milliseconds that will be used by <code>rateLimitFn</code>. Defaults to <code>300</code>.</p></li>
+<li><p><code>wildcard</code> - The pattern in the <code>remote</code> URL that will be replaced with the user's query when a request is made. Defaults to <code>%QUERY</code>.</p></li>
+<li><p><code>maxConcurrentRequests</code> - The max number of AJAX requests typeahead.js can have pending. Defaults to <code>6</code>.</p></li>
+</ul><h3>Template Engine Compatibility</h3>
+
+<p>Any template engine will work with typeahead.js as long as it adheres to the following API:</p>
+
+<div class="highlight"><pre><span class="c1">// engine has a compile function that returns a compiled template</span>
+<span class="kd">var</span> <span class="nx">compiledTemplate</span> <span class="o">=</span> <span class="nx">ENGINE</span><span class="p">.</span><span class="nx">compile</span><span class="p">(</span><span class="nx">template</span><span class="p">);</span>
+
+<span class="c1">// compiled template has a render function that returns the rendered template</span>
+<span class="c1">// render function expects the context to be first argument passed to it</span>
+<span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">compiledTemplate</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span>
+</pre></div>
+
+<p>Check out <a href="http://twitter.github.com/hogan.js/">Hogan.js</a> if you're looking for a compatible mustache templating engine.</p>
+
+<h3>Look and Feel</h3>
+
+<p>The purpose of the CSS file required by typeahead.js (i.e. <em>typeahead.css</em>) is to position the hint and dropdown menu components of typeaheads. It should not alter the appearance of the <code>input[type="text"]</code> it is called on.</p>
+
+<p>By default, the dropdown menu created by typeahead.js is going to look ugly and you'll want to style it to ensure it fits into the theme of your web page. Below is a Mustache template describing the DOM structure of a typeahead.js dropdown menu. Note that the <code>{{{html}}}</code> tag is the HTML generated by the custom template you provide when defining datasets.</p>
+
+<div class="highlight"><pre><span class="nt">&lt;ol</span> <span class="na">class=</span><span class="s">"tt-dropdown-menu"</span><span class="nt">&gt;</span>
+  {{#dataset}}
+    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"tt-dataset-{{name}}"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;ol</span> <span class="na">class=</span><span class="s">"tt-suggestions"</span><span class="nt">&gt;</span>
+        {{#suggestions}}
+          <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"tt-suggestion"</span><span class="nt">&gt;</span>{{{html}}}<span class="nt">&lt;li&gt;</span>
+        {{/suggestions}}
+      <span class="nt">&lt;/ol&gt;</span>
+  {{/dataset}}
+<span class="nt">&lt;/ol&gt;</span>
+</pre></div>
+
+<p>When an end-user mouses or keys over a <code>.tt-suggestion</code>, the class <code>tt-is-under-cursor</code> will be added to it. You can use this class as a hook for styling the "under cursor" state of suggestions.</p>
+
+<h2>Bootstrap Integration</h2>
+
+<p>For simple autocomplete use cases, the typeahead component <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> provides should suffice. However, if you'd prefer to take advantage of some of the advance features typeahead.js provides, here's what you'll need to do to integrate typeahead.js with Bootstrap:</p>
+
+<ul>
+<li>If you're customizing Bootstrap, exclude the typeahead component. If you're depending on the standard <em>bootstrap.js</em>, ensure <em>typeahead.js</em> is loaded after it.</li>
+<li>The DOM structure of the dropdown menu used by typeahead.js differs from the DOM structure of the Bootstrap dropdown menu. You'll need to load some <a href="https://github.com/jharding/typeahead.js-bootstrap.css">additional CSS</a> in order to get the typeahead.js dropdown menu to fit the default Bootstrap theme.</li>
+</ul><h2>Possible Future Work</h2>
+
+<ul>
+<li>Mobile support</li>
+<li>Benchmarking tool</li>
+<li>Logging and analytics hooks</li>
+<li>Backend component</li>
+</ul><h2>Issues</h2>
+
+<p>Have a bug? Please create an issue here on GitHub!</p>
+
+<p><a href="https://github.com/twitter/typeahead/issues">https://github.com/twitter/typeahead/issues</a></p>
+
+<h2>Versioning</h2>
+
+<p>For transparency and insight into our release cycle, releases will be numbered with the follow format:</p>
+
+<p><code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code></p>
+
+<p>And constructed with the following guidelines:</p>
+
+<ul>
+<li>Breaking backwards compatibility bumps the major</li>
+<li>New additions without breaking backwards compatibility bumps the minor</li>
+<li>Bug fixes and misc changes bump the patch</li>
+</ul><p>For more information on semantic versioning, please visit <a href="http://semver.org/">http://semver.org/</a>.</p>
+
+<h2>Testing</h2>
+
+<p>Tests are written using <a href="http://pivotal.github.com/jasmine/">Jasmine</a>. To run the test suite with PhantomJS, run <code>$ grunt test</code>. To run the test suite in your default browser, run <code>$ grunt test:browser</code>.</p>
+
+<h2>Developers</h2>
+
+<p>If you plan on contributing to typeahead.js, be sure to read the <a href="https://github.com/jharding/ghostwriter/blob/master/CONTRIBUTING.md">contributing guidelines</a>.</p>
+
+<p>In order to build and test typeahead.js, you'll need to install its devDependencies (<code>$ npm install</code>) and have <a href="https://github.com/gruntjs/grunt-cli">grunt-cli</a> installed (<code>$ npm install -g grunt-cli</code>). Below is an overview of the available Grunt tasks that'll be useful in development.</p>
+
+<ul>
+<li>
+<code>grunt build</code> - Builds <em>typeahead.js</em> and <em>typeahead.css</em> from source.</li>
+<li>
+<code>grunt build:js</code> - Builds <em>typeahead.js</em> from source.</li>
+<li>
+<code>grunt build:css</code> - Builds <em>typeahead.css</em> from source.</li>
+<li>
+<code>grunt lint</code> - Runs source and test files through JSHint.</li>
+<li>
+<code>grunt test</code> - Runs the test suite with PhantomJS.</li>
+<li>
+<code>grunt test:browser</code> - Runs the test suite in your default browser.</li>
+<li>
+<code>grunt watch</code> - Rebuilds <em>typeahead.js</em> whenever a source file is modified.</li>
+</ul><h2>Authors</h2>
+
+<ul>
+<li>
+<strong>Tim Trueman</strong> (<a href="https://twitter.com/timtrueman">Twitter</a> / <a href="https://github.com/timtrueman">GitHub</a>)</li>
+<li>
+<strong>Veljko Skarich</strong> (<a href="https://twitter.com/vskarich">Twitter</a> / <a href="https://github.com/velsgithub">GitHub</a>)</li>
+<li>
+<strong>Jake Harding</strong> (<a href="https://twitter.com/JakeHarding">Twitter</a> / <a href="https://github.com/jharding">GitHub</a>)</li>
+</ul><h2>Shoutouts!</h2>
+
+<p>Thanks for assistance and contributions:</p>
+
+<ul>
+<li><a href="https://github.com/fat">@fat</a></li>
+<li><a href="https://github.com/garann">@garann</a></li>
+<li><a href="https://github.com/paulirish">@paulirish</a></li>
+<li><a href="https://github.com/sindresorhus">@sindresorhus</a></li>
+<li><a href="https://twitter.com/thisguy">@thisguy</a></li>
+<li>And many others!</li>
+</ul><h2>License</h2>
+
+<p>Copyright 2013 Twitter, Inc.</p>
+
+<p>Licensed under the MIT License</p>
+
+
+
+
+
+
+
+
       </section>
     </div>
     <footer>
