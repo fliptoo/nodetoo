@@ -1,0 +1,218 @@
+#!/usr/bin/env node
+
+// Module dependencies
+var exec = require('child_process').exec
+  , program = require('commander')
+  , mkdirp = require('mkdirp')
+  , pkg = require('../package.json')
+  , version = pkg.version
+  , os = require('os')
+  , fs = require('fs');
+
+// CLI
+program
+  .version(version)
+  .option('-s, --sessions', 'add session support')
+  .option('-e, --ejs', 'add ejs engine support (defaults to jade)')
+  .option('-J, --jshtml', 'add jshtml engine support (defaults to jade)')
+  .option('-H, --hogan', 'add hogan.js engine support')
+  .option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus) (defaults to plain css)')
+  .option('-f, --force', 'force on non-empty directory')
+  .parse(process.argv);
+
+// Path
+var path = program.args.shift() || '.';
+
+// end-of-line code
+var eol = 'win32' == os.platform() ? '\r\n' : '\n'
+
+// Template engine
+program.template = 'jade';
+
+// Routes template
+var routes = [
+    ''
+  , 'module.exports = ['
+  , '  { routes : ['
+  , '        [\'/\'                        ,\'get\'  ,\'home.index\']'
+  , '      , [\'/about\'                   ,\'get\'  ,\'home.about\']'
+  , '  ]}'
+  , ']'
+].join(eol);
+
+// Controller template
+var home = [
+    ''
+  , '/*'
+  , ' * GET users listing.'
+  , ' */'
+  , ''
+  , 'exports.index = function(req, res){'
+  , '  res.render(\'home/index\')'
+  , '};'
+  , ''
+  , 'exports.about = function(req, res){'
+  , '  res.render(\'home/about\');'
+  , '};'
+].join(eol);
+
+// Jade main template
+var jadeMain = [
+    'doctype 5'
+  , 'html'
+  , '  head'
+  , '    title nodetoo'
+  , '    link(rel=\'stylesheet\', href=\'/stylesheets/style.css\')'
+  , '  body'
+  , '    block content'
+].join(eol);
+
+// Jade index template
+var jadeIndex = [
+    'extends ../layouts/main'
+  , ''
+  , 'block content'
+  , '  h1 nodetoo'
+  , '  p Welcome to nodetoo'
+].join(eol);
+
+// Jade about template
+var jadeAbout = [
+    'extends ../layouts/main'
+  , ''
+  , 'block content'
+  , '  h1 nodetoo'
+  , '  p About nodetoo'
+].join(eol);
+
+// Generate application
+(function createApplication(path) {
+  emptyDirectory(path, function(empty){
+    if (empty || program.force) {
+      createApplicationAt(path);
+    } else {
+      program.confirm('destination is not empty, continue? ', function(ok){
+        if (ok) {
+          process.stdin.destroy();
+          createApplicationAt(path);
+        } else {
+          abort('aborting');
+        }
+      });
+    }
+  });
+})(path);
+
+/**
+ * Create application at the given directory `path`.
+ *
+ * @param {String} path
+ */
+function createApplicationAt(path) {
+  console.log();
+  process.on('exit', function(){
+    console.log();
+    console.log('   \x1b[36mnodetoo\x1b[0m successfully installed.');
+    console.log();
+  });
+  createApp();
+}
+
+function createExpress() {
+  var express = exec('express',
+    function (error, stdout, stderr) {
+      if (error !== null) {
+        abort('aborting: ' + error);
+      } else {
+        createApp();
+      }
+  });
+
+  express.stdout.on('data', function (data) {
+    switch (data.toString().trim()) {
+        case 'destination is not empty, continue?':
+            express.stdin.write('yes\n');
+            break;
+    }
+  });
+}
+
+function createApp() {
+  // create path
+  mkdir(path, function(){
+
+    // create app
+    mkdir(path + '/app', function(){
+
+      // create routes
+      write(path + '/app/routes.js', routes);
+
+      // create controllers
+      mkdir(path + '/app/controllers', function(){
+        mkdir(path + '/app/controllers/home', function(){
+          write(path + '/app/controllers/home/index.js', home);
+        });
+      });
+
+      // create views
+      mkdir(path + '/app/views', function(){
+        mkdir(path + '/app/views/layouts', function(){
+          write(path + '/app/views/layouts/main.jade', jadeMain);
+        });
+
+        mkdir(path + '/app/views/home', function(){
+          write(path + '/app/views/home/index.jade', jadeIndex);
+          write(path + '/app/views/home/about.jade', jadeAbout);
+        });
+      });
+    });
+  });
+}
+
+/**
+ * Check if the given directory `path` is empty.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+function emptyDirectory(path, fn) {
+  fs.readdir(path, function(err, files){
+    if (err && 'ENOENT' != err.code) throw err;
+    fn(!files || !files.length);
+  });
+}
+
+/**
+ * echo str > path.
+ *
+ * @param {String} path
+ * @param {String} str
+ */
+function write(path, str) {
+  fs.writeFile(path, str);
+  console.log('   \x1b[36mcreate\x1b[0m : ' + path);
+}
+
+/**
+ * Mkdir -p.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+function mkdir(path, fn) {
+  mkdirp(path, 0755, function(err){
+    if (err) throw err;
+    console.log('   \033[36mcreate\033[0m : ' + path);
+    fn && fn();
+  });
+}
+
+/**
+ * Exit with the given `str`.
+ *
+ * @param {String} str
+ */
+function abort(str) {
+  console.error(str);
+  process.exit(1);
+}

@@ -1,0 +1,16 @@
+{
+  "name": "nodetoo",
+  "description": "Just another mvc for node",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./index",
+  "bin": {
+    "nodetoo": "./bin/nodetoo"
+  },
+  "dependencies": {
+      "underscore": "*"
+    , "commander": "*"
+    , "mkdirp": "*"
+    , "express": "*"
+  }
+}
