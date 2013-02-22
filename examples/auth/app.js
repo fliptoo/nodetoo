@@ -5,7 +5,8 @@
 
 var express = require('express')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , user = require('./app/models/user');
 
 var app = express();
 
@@ -17,7 +18,8 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  require('../../')(app, __dirname + '/app');
+  app.use(express.cookieParser('nodetoo'));
+  app.use(express.session());
   app.use(app.router);
   app.use(require('stylus').middleware(__dirname + '/public'));
   app.use(express.static(path.join(__dirname, 'public')));
@@ -26,6 +28,9 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
+
+// botstrap nodetoo
+require('../../')(app, __dirname + '/app', user.auth);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('     Express + MVC = nodetoo');

@@ -1,0 +1,25 @@
+extends ../layouts/main
+
+block content
+  h1 Express + MVC = {nodetoo}
+  p About 
+    a(href='/about') {nodetoo}
+
+  if locals.user
+    span Hi #{user.username}, 
+    a(href='/logout') logout
+  else 
+    span You can login 
+    a(href='/login') here
+
+  p Secure Pages
+    br
+    a(href='/anyone') anyone
+    span  | 
+    a(href='/user') user
+    span  | 
+    a(href='/admin') admin
+    span  | 
+    a(href='/root') root
+    span  | 
+    a(href='/mix') mix

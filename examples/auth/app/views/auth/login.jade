@@ -1,0 +1,20 @@
+extends ../layouts/main
+
+block content
+  h1 Express + MVC = {nodetoo}
+  p Please login
+
+  div.row
+    form.login.form-horizontal(action="/login", method="post")
+      .control-group
+        label.control-label(for='username') Username
+        .controls
+          input#email(type='text', name="username", placeholder='Username')
+
+      .control-group
+        label.control-label(for='password') Password
+        .controls
+          input#password(type='password', name="password", placeholder='Password')
+
+      .form-actions
+        button.btn.btn-primary(type='submit') Login

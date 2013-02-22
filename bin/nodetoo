@@ -72,8 +72,9 @@ var jadeIndex = [
     'extends ../layouts/main'
   , ''
   , 'block content'
-  , '  h1 nodetoo'
-  , '  p Welcome to nodetoo'
+  , '  h1 Express + MVC = {nodetoo}'
+  , '  p About '
+  , '    a(href=\'/about\') {nodetoo}'
 ].join(eol);
 
 // Jade about template
@@ -81,8 +82,9 @@ var jadeAbout = [
     'extends ../layouts/main'
   , ''
   , 'block content'
-  , '  h1 nodetoo'
-  , '  p About nodetoo'
+  , '  h1 Express + MVC = {nodetoo}'
+  , '  p Welcome '
+  , '    a(href=\'/\') {nodetoo}'
 ].join(eol);
 
 // Generate application
@@ -146,6 +148,10 @@ function createApp() {
 
       // create routes
       write(path + '/app/routes.js', routes);
+
+      // create models
+      mkdir(path + '/app/models', function(){
+      });
 
       // create controllers
       mkdir(path + '/app/controllers', function(){
