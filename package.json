@@ -12,5 +12,9 @@
     , "commander": "*"
     , "mkdirp": "*"
     , "express": "*"
+  },
+  "devDependencies": {
+      "jade": "*"
+    , "stylus": "*"
   }
 }
