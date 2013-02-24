@@ -8,16 +8,17 @@ Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/ma
 
 ## Quick Start
 
-Assuming you have created a project with Express, please refer [here](http://expressjs.com/guide.html) for the guide.  
-Create the app:
+Assuming you have created a `project` with Express, please refer [here](http://expressjs.com/guide.html) for the guide.  
+##### Create the `app/`:
+
 ```
 $ cd /project
 $ npm install nodetoo
 $ nodetoo
-```
-nodetoo will generate a `app/` folder.
-    
-Bootstrap nodetoo:
+``` 
+
+##### Bootstrap nodetoo:
+
 ```js
 var express = require('express');
 var nodetoo = require('nodetoo');
@@ -28,7 +29,9 @@ nodetoo(app, __dirname + '/app');
 
 app.listen(3000);
 ```
-Start the server:
+
+##### Start the server:
+
 ```
 $ node app
 ```
