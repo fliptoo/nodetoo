@@ -10,7 +10,7 @@ Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/ma
 
 Assuming you have created a `project` with Express, please refer [here](http://expressjs.com/guide.html) for the guide.  
 
-Create the `app/`:
+- Create the `app/`
 
 ```
 $ cd /project
@@ -18,7 +18,7 @@ $ npm install nodetoo
 $ nodetoo
 ``` 
 
-Bootstrap nodetoo:
+- Bootstrap nodetoo:
 
 ```js
 var express = require('express');
@@ -31,7 +31,7 @@ nodetoo(app, __dirname + '/app');
 app.listen(3000);
 ```
 
-Start the server:
+- Start the server:
 
 ```
 $ node app
