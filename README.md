@@ -41,7 +41,7 @@ $ node app
 
 nodetoo only work on the `app/` folder
 
-```js
+```
 app/
   controllers/
     home/
@@ -119,7 +119,7 @@ module.exports = [
 
 ## Authentication
 
-nodetoo take the 3rd argument as the authentication middleware.
+nodetoo take a 3rd argument as the authentication middleware (authenticator).
 
 ```js
 var auth = function(roles) {
