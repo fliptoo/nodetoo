@@ -35,12 +35,13 @@ var users = [
  */
 exports.auth = function(roles) {
   return function (req, res, next) {
-    if (req.session.user === undefined) {
+    var user = req.session.user;
+    if (user === undefined) {
       res.status(401).render('401');
     } 
     // asterisk skip authorization
     else if (!_.contains(roles, '*') 
-          && !_.intersection(req.session.user.roles, roles).length > 0) {
+          && !_.intersection(user.roles, roles).length > 0) {
       res.status(401).render('401');
     } else next();
   }
