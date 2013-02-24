@@ -41,7 +41,7 @@ $ node app
 
 nodetoo only work on the `app/` folder
 
-```
+```js
 app/
   controllers/
     home/
@@ -57,6 +57,13 @@ app/
 ## Models
 
 Each js file under `models/` is a model, nodetoo will bootstrap all of them automatically. 
+
+```
+models/
+  user.js
+  post.js
+  comment.js
+```
 
 ## Controllers
 
