@@ -67,17 +67,17 @@ $ nodetoo
 
 <p>nodetoo only work on the <code>app/</code> folder</p>
 
-<div class="highlight"><pre><span class="nx">app</span><span class="o">/</span>
-  <span class="nx">controllers</span><span class="o">/</span>
-    <span class="nx">home</span><span class="o">/</span>
-      <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
-  <span class="nx">models</span><span class="o">/</span>
-      <span class="nx">user</span><span class="p">.</span><span class="nx">js</span>
-  <span class="nx">views</span><span class="o">/</span>
-    <span class="nx">home</span><span class="o">/</span>
-      <span class="nx">index</span><span class="p">.</span><span class="nx">jade</span>
-  <span class="nx">routes</span><span class="p">.</span><span class="nx">js</span>
-</pre></div>
+<pre><code>app/
+  controllers/
+    home/
+      index.js
+  models/
+      user.js
+  views/
+    home/
+      index.jade
+  routes.js
+</code></pre>
 
 <h2>Models</h2>
 
@@ -140,7 +140,7 @@ home.about
 
 <h2>Authentication</h2>
 
-<p>nodetoo take the 3rd argument as the authentication middleware.</p>
+<p>nodetoo take a 3rd argument as the authentication middleware (authenticator).</p>
 
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">auth</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roles</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
