@@ -1,29 +1,6 @@
 {nodetoo}
 =========
-Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/master/examples/mvc), nodetoo is flexible router library.
-
-```js
-module.exports = [
-// public routes  
-  { routes : [
-        ['/'                        ,'get'  ,'controller.index']
-      , ['/login'                   ,'all'  ,'controller.login']
-      , ['/logout'                  ,'get'  ,'controller.logout']
-  ]}
-
-// user with any roles
-, { roles  : ['*'],
-    routes : [
-        ['/anyone'                  ,'get'  ,'controller.anyone']
-  ]}
-
-// user with admin role only
-, { roles  : ['admin'],
-    routes : [
-        ['/admin'                    ,'get'  ,'controller.admin']
-  ]}
-]
-```
+Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/master/examples/mvc), nodetoo is a MVC framework built on top of [Express](expressjs.com).
 
 ## Installation
 
@@ -44,6 +21,74 @@ module.exports = [
  Start the server:
 
     $ node app
+    
+##Project Structure
+
+nodetoo only work on the `app/` folder
+
+```
+app/
+  controllers/
+    home/
+      index.js
+  models/
+      user.js
+  views/
+    home/
+      index.jade
+  routes.js
+```
+##Controllers
+
+Each folder under `controllers/` is a controller, `index.js` represent the js file.  
+Let's take a look at the `controllers/home/index.js` file.
+
+```js
+exports.index = function(req, res) {
+  var user = req.session.user;
+  res.render('home/index', {user: user});
+};
+
+exports.about = function(req, res) {
+  res.render('home/about');
+};
+```
+
+##Actions
+
+Action is a controller method and represent as `[controller].[method]`.
+
+```
+home.index
+home.about
+```
+
+##Routes
+
+Routes are defined in the `app/route.js` file
+
+```js
+module.exports = [
+// public routes  
+  { routes : [
+        ['/'                        ,'get'  ,'home.index']
+      , ['/login'                   ,'all'  ,'user.login']
+      , ['/logout'                  ,'get'  ,'user.logout']
+  ]}
+
+// user with any roles
+, { roles  : ['*'],
+    routes : [
+        ['/anyone'                  ,'get'  ,'anyone.index']
+  ]}
+
+// user with admin role only
+, { roles  : ['admin'],
+    routes : [
+        ['/admin'                    ,'get' ,'admin.index']
+  ]}
+]
+```
 
 ## Features
 
