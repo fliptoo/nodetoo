@@ -24,7 +24,7 @@ Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/ma
     
 ## Bootstrap
 
-Only 1 line of code to bootstrap nodetoo with Express.
+Only 1 line of code is required to bootstrap nodetoo with Express.
 
 ```js
 var express = require('express');
@@ -112,12 +112,13 @@ nodetoo take the 3rd argument as the authentication middleware.
 ```js
 var auth = function(roles) {
   return function (req, res, next) {
-    if (req.session.user === undefined) {
+    var user = req.session.user;
+    if (user === undefined) {
       res.status(401).render('401');
     } 
     // asterisk skip authorization
     else if (!_.contains(roles, '*') 
-          && !_.intersection(req.session.user.roles, roles).length > 0) {
+          && !_.intersection(user.roles, roles).length > 0) {
       res.status(401).render('401');
     } else next();
   }
