@@ -36,17 +36,27 @@
 
 <h2>Quick Start</h2>
 
-<p>Create the app:</p>
+<p>Assuming you have created a project with Express, please refer <a href="http://expressjs.com/guide.html">here</a> for the guide.<br>
+Create the app:</p>
 
-<pre><code>$ npm install -g nodetoo
-$ express /tmp/foo &amp;&amp; cd /tmp/foo
+<pre><code>$ cd /project
+$ npm install nodetoo
 $ nodetoo
 </code></pre>
 
-<p>Install dependencies:</p>
+<p>nodetoo will generate a <code>app/</code> folder.</p>
 
-<pre><code>$ npm install
-</code></pre>
+<p>Bootstrap nodetoo:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">nodetoo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'nodetoo'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="c1">// bootstrap nodetoo</span>
+<span class="nx">nodetoo</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/app'</span><span class="p">);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
+</pre></div>
 
 <p>Start the server:</p>
 
@@ -68,6 +78,10 @@ $ nodetoo
       index.jade
   routes.js
 </code></pre>
+
+<h2>Models</h2>
+
+<p>Each js file under <code>models/</code> is a model, nodetoo will bootstrap all of them automatically. </p>
 
 <h2>Controllers</h2>
 
@@ -118,47 +132,30 @@ home.about
 <span class="p">]</span>
 </pre></div>
 
-<h2>Features</h2>
+<h2>Authentication</h2>
 
-<ul>
-<li>Built on <a href="http://github.com/senchalabs/connect">Connect</a>
-</li>
-<li>Robust routing</li>
-<li>HTTP helpers (redirection, caching, etc)</li>
-<li>View system supporting 14+ template engines</li>
-<li>Content negotiation</li>
-<li>Focus on high performance</li>
-<li>Environment based configuration</li>
-<li>Executable for generating applications quickly</li>
-<li>High test coverage</li>
-</ul><h2>Philosophy</h2>
+<p>nodetoo take the 3rd argument as the authentication middleware.</p>
 
-<p>The Express philosophy is to provide small, robust tooling for HTTP servers. Making
-  it a great solution for single page applications, web sites, hybrids, or public
-  HTTP APIs.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">auth</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roles</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="s1">'401'</span><span class="p">);</span>
+    <span class="p">}</span> 
+    <span class="c1">// asterisk skip authorization</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">contains</span><span class="p">(</span><span class="nx">roles</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">)</span> 
+          <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">_</span><span class="p">.</span><span class="nx">intersection</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">roles</span><span class="p">,</span> <span class="nx">roles</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="s1">'401'</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="nx">next</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-<p>Built on Connect you can use <em>only</em> what you need, and nothing more, applications
-  can be as big or as small as you like, even a single file. Express does
-  not force you to use any specific ORM or template engine. With support for over
-  14 template engines via <a href="http://github.com/visionmedia/consolidate.js">Consolidate.js</a>
-  you can quickly craft your perfect framework.</p>
+<span class="nx">nodetoo</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/app'</span><span class="p">,</span> <span class="nx">auth</span><span class="p">);</span>
+</pre></div>
 
-<h2>More Information</h2>
+<p>But how you write the authenticator, it is really up to you.</p>
 
-<ul>
-<li>Join #express on freenode</li>
-<li>
-<a href="http://groups.google.com/group/express-js">Google Group</a> for discussion</li>
-<li>Follow <a href="http://twitter.com/tjholowaychuk">tjholowaychuk</a> on twitter for updates</li>
-<li>Visit the <a href="http://github.com/visionmedia/express/wiki">Wiki</a>
-</li>
-<li>
-<a href="http://hideyukisaito.com/doc/expressjs/">日本語ドキュメンテーション</a> by <a href="https://github.com/hideyukisaito">hideyukisaito</a>
-</li>
-<li><a href="http://express-js.ru/">Русскоязычная документация</a></li>
-<li>Run express examples <a href="https://runnable.com/express">online</a>
-</li>
-</ul><h2>Viewing Examples</h2>
+<h2>Viewing Examples</h2>
 
 <p>Clone the Express repo, then install the dev dependencies to install all the example / test suite deps:</p>
 
