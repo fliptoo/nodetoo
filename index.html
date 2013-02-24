@@ -27,29 +27,7 @@
         </ul>
       </header>
       <section>
-        <p>Inspired by <a href="https://github.com/visionmedia/express/tree/master/examples/mvc">Express mvc example</a>, nodetoo is flexible router library.</p>
-
-<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
-<span class="c1">// public routes  </span>
-  <span class="p">{</span> <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/'</span>                        <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'controller.index'</span><span class="p">]</span>
-      <span class="p">,</span> <span class="p">[</span><span class="s1">'/login'</span>                   <span class="p">,</span><span class="s1">'all'</span>  <span class="p">,</span><span class="s1">'controller.login'</span><span class="p">]</span>
-      <span class="p">,</span> <span class="p">[</span><span class="s1">'/logout'</span>                  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'controller.logout'</span><span class="p">]</span>
-  <span class="p">]}</span>
-
-<span class="c1">// user with any roles</span>
-<span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
-    <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/anyone'</span>                  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'controller.anyone'</span><span class="p">]</span>
-  <span class="p">]}</span>
-
-<span class="c1">// user with admin role only</span>
-<span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'admin'</span><span class="p">],</span>
-    <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/admin'</span>                    <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'controller.admin'</span><span class="p">]</span>
-  <span class="p">]}</span>
-<span class="p">]</span>
-</pre></div>
+        <p>Inspired by <a href="https://github.com/visionmedia/express/tree/master/examples/mvc">Express mvc example</a>, nodetoo is a MVC framework built on top of <a href="expressjs.com">Express</a>.</p>
 
 <h2>Installation</h2>
 
@@ -74,6 +52,71 @@ $ nodetoo
 
 <pre><code>$ node app
 </code></pre>
+
+<h2>Project Structure</h2>
+
+<p>nodetoo only work on the <code>app/</code> folder</p>
+
+<pre><code>app/
+  controllers/
+    home/
+      index.js
+  models/
+      user.js
+  views/
+    home/
+      index.jade
+  routes.js
+</code></pre>
+
+<h2>Controllers</h2>
+
+<p>Each folder under <code>controllers/</code> is a controller, <code>index.js</code> represent the js file.<br>
+Let's take a look at the <code>controllers/home/index.js</code> file.</p>
+
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/index'</span><span class="p">,</span> <span class="p">{</span><span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">about</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/about'</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+
+<h2>Actions</h2>
+
+<p>Action is a controller method and represent as <code>[controller].[method]</code>.</p>
+
+<pre><code>home.index
+home.about
+</code></pre>
+
+<h2>Routes</h2>
+
+<p>Routes are defined in the <code>app/route.js</code> file</p>
+
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
+<span class="c1">// public routes  </span>
+  <span class="p">{</span> <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s1">'/'</span>                        <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">]</span>
+      <span class="p">,</span> <span class="p">[</span><span class="s1">'/login'</span>                   <span class="p">,</span><span class="s1">'all'</span>  <span class="p">,</span><span class="s1">'user.login'</span><span class="p">]</span>
+      <span class="p">,</span> <span class="p">[</span><span class="s1">'/logout'</span>                  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'user.logout'</span><span class="p">]</span>
+  <span class="p">]}</span>
+
+<span class="c1">// user with any roles</span>
+<span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
+    <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s1">'/anyone'</span>                  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'anyone.index'</span><span class="p">]</span>
+  <span class="p">]}</span>
+
+<span class="c1">// user with admin role only</span>
+<span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'admin'</span><span class="p">],</span>
+    <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s1">'/admin'</span>                    <span class="p">,</span><span class="s1">'get'</span> <span class="p">,</span><span class="s1">'admin.index'</span><span class="p">]</span>
+  <span class="p">]}</span>
+<span class="p">]</span>
+</pre></div>
 
 <h2>Features</h2>
 
