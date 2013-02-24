@@ -8,24 +8,16 @@ Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/ma
 
 ## Quick Start
 
- Create the app:
-
-    $ npm install -g nodetoo
-    $ express /tmp/foo && cd /tmp/foo
-    $ nodetoo
-
- Install dependencies:
-
-    $ npm install
-
- Start the server:
-
-    $ node app
+Assuming you have created a project with Express, please refer [here](http://expressjs.com/guide.html) for the guide.  
+Create the app:
+```
+$ cd /project
+$ npm install nodetoo
+$ nodetoo
+```
+nodetoo will generate a `app/` folder.
     
-## Bootstrap
-
-Only 1 line of code is required to bootstrap nodetoo with Express.
-
+Bootstrap nodetoo:
 ```js
 var express = require('express');
 var nodetoo = require('nodetoo');
@@ -36,7 +28,11 @@ nodetoo(app, __dirname + '/app');
 
 app.listen(3000);
 ```
-    
+Start the server:
+```
+$ node app
+```
+
 ## Project Structure
 
 nodetoo only work on the `app/` folder
@@ -53,6 +49,11 @@ app/
       index.jade
   routes.js
 ```
+
+## Models
+
+Each js file under `models/` is a model, nodetoo will bootstrap all of them automatically. 
+
 ## Controllers
 
 Each folder under `controllers/` is a controller, `index.js` represent the js file.  
@@ -126,6 +127,7 @@ var auth = function(roles) {
 
 nodetoo(app, __dirname + '/app', auth);
 ```
+But how you write the authenticator, it is really up to you.
 
 ## Viewing Examples
 
