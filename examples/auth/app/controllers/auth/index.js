@@ -5,9 +5,9 @@ exports.login = function(req, res) {
   if (req.method === 'POST') {
     var username = req.param('username');
     var password = req.param('password');
-    user.login(username, password, function (user){
-      if (user === undefined) {
-        res.render('auth/login')
+    user.login(username, password, function (err, user){
+      if (err) {
+        res.render('auth/login', {error: err})
       } else {
         req.session.user = user;
         res.redirect('/');

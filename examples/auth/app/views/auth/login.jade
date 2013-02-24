@@ -4,6 +4,9 @@ block content
   h1 Express + MVC = {nodetoo}
   p Please login
 
+  if locals.error
+    div #{error.message}
+
   div.row
     form.login.form-horizontal(action="/login", method="post")
       .control-group
