@@ -1,4 +1,4 @@
-[nodetoo][gh-page]
+{nodetoo}
 =======================
 
 Inspired by [https://github.com/visionmedia/express/tree/master/examples/mvc][Express mvc examples]'s autocomplete search functionality, nodetoo is flexible router library.
