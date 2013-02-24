@@ -1,9 +1,7 @@
-[![build status](https://secure.travis-ci.org/twitter/typeahead.js.png?branch=master)](http://travis-ci.org/twitter/typeahead.js)
-
-[typeahead.js][gh-page]
+[nodetoo][gh-page]
 =======================
 
-Inspired by [twitter.com][twitter]'s autocomplete search functionality, typeahead.js is a fast and [fully-featured][features] autocomplete library.
+Inspired by [https://github.com/visionmedia/express/tree/master/examples/mvc][Express mvc examples]'s autocomplete search functionality, nodetoo is flexible router library.
 
 Getting Started
 ---------------
