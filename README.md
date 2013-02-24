@@ -22,7 +22,22 @@ Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/ma
 
     $ node app
     
-##Project Structure
+## Bootstrap
+
+Only 1 line of code to bootstrap nodetoo with Express.
+
+```js
+var express = require('express');
+var nodetoo = require('nodetoo');
+var app = express();
+
+// bootstrap nodetoo
+nodetoo(app, __dirname + '/app');
+
+app.listen(3000);
+```
+    
+## Project Structure
 
 nodetoo only work on the `app/` folder
 
@@ -38,7 +53,7 @@ app/
       index.jade
   routes.js
 ```
-##Controllers
+## Controllers
 
 Each folder under `controllers/` is a controller, `index.js` represent the js file.  
 Let's take a look at the `controllers/home/index.js` file.
@@ -54,7 +69,7 @@ exports.about = function(req, res) {
 };
 ```
 
-##Actions
+## Actions
 
 Action is a controller method and represent as `[controller].[method]`.
 
@@ -63,7 +78,7 @@ home.index
 home.about
 ```
 
-##Routes
+## Routes
 
 Routes are defined in the `app/route.js` file
 
@@ -90,39 +105,26 @@ module.exports = [
 ]
 ```
 
-## Features
+## Authentication
 
-  * Built on [Connect](http://github.com/senchalabs/connect)
-  * Robust routing
-  * HTTP helpers (redirection, caching, etc)
-  * View system supporting 14+ template engines
-  * Content negotiation
-  * Focus on high performance
-  * Environment based configuration
-  * Executable for generating applications quickly
-  * High test coverage
+nodetoo take the 3rd argument as the authentication middleware.
 
-## Philosophy
+```js
+var auth = function(roles) {
+  return function (req, res, next) {
+    if (req.session.user === undefined) {
+      res.status(401).render('401');
+    } 
+    // asterisk skip authorization
+    else if (!_.contains(roles, '*') 
+          && !_.intersection(req.session.user.roles, roles).length > 0) {
+      res.status(401).render('401');
+    } else next();
+  }
+}
 
-  The Express philosophy is to provide small, robust tooling for HTTP servers. Making
-  it a great solution for single page applications, web sites, hybrids, or public
-  HTTP APIs.
-
-  Built on Connect you can use _only_ what you need, and nothing more, applications
-  can be as big or as small as you like, even a single file. Express does
-  not force you to use any specific ORM or template engine. With support for over
-  14 template engines via [Consolidate.js](http://github.com/visionmedia/consolidate.js)
-  you can quickly craft your perfect framework.
-
-## More Information
-
-  * Join #express on freenode
-  * [Google Group](http://groups.google.com/group/express-js) for discussion
-  * Follow [tjholowaychuk](http://twitter.com/tjholowaychuk) on twitter for updates
-  * Visit the [Wiki](http://github.com/visionmedia/express/wiki)
-  * [日本語ドキュメンテーション](http://hideyukisaito.com/doc/expressjs/) by [hideyukisaito](https://github.com/hideyukisaito)
-  * [Русскоязычная документация](http://express-js.ru/)
-  * Run express examples [online](https://runnable.com/express)
+nodetoo(app, __dirname + '/app', auth);
+```
 
 ## Viewing Examples
 
