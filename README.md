@@ -144,13 +144,13 @@ But how you write the authenticator, it is really up to you.
 
 Clone the Express repo, then install the dev dependencies to install all the example / test suite deps:
 
-    $ git clone git://github.com/visionmedia/express.git --depth 1
-    $ cd express
+    $ git clone git://github.com/fliptoo/nodetoo.git --depth 1
+    $ cd nodetoo
     $ npm install
 
 then run whichever tests you want:
 
-    $ node examples/content-negotiation
+    $ node examples/basic
 
 ## License
 
