@@ -1,8 +1,8 @@
 {
   "name": "nodetoo",
-  "description": "Just another mvc for node",
-  "version": "0.0.1",
-  "private": true,
+  "description": "Express + MVC = {nodetoo}",
+  "version": "1.0.0",
+  "author": "fliptoo <fliptoo.studio@gmail.com>",
   "main": "./index",
   "bin": {
     "nodetoo": "./bin/nodetoo"
@@ -11,10 +11,20 @@
       "underscore": "*"
     , "commander": "*"
     , "mkdirp": "*"
-    , "express": "*"
   },
   "devDependencies": {
       "jade": "*"
-    , "stylus": "*"
-  }
+  },
+  "keywords": [
+    "express",
+    "framework",
+    "mvc",
+    "web",
+    "rest",
+    "restful",
+    "router",
+    "app",
+    "api"
+  ],
+  "repository": "git://github.com/fliptoo/nodetoo",
 }

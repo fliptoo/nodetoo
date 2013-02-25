@@ -35,6 +35,7 @@ var users = [
  */
 exports.auth = function(roles) {
   return function (req, res, next) {
+    // retrieve user from session
     var user = req.session.user;
     if (user === undefined) {
       res.status(401).render('401');
