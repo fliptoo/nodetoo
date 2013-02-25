@@ -124,6 +124,7 @@ nodetoo take a 3rd argument as the authentication middleware (authenticator).
 ```js
 var auth = function(roles) {
   return function (req, res, next) {
+    // retrieve user from session
     var user = req.session.user;
     if (user === undefined) {
       res.status(401).render('401');
@@ -140,15 +141,15 @@ nodetoo(app, __dirname + '/app', auth);
 ```
 But how you write the authenticator, it is really up to you.
 
-## Viewing Examples
+## Examples
 
-Clone the Express repo, then install the dev dependencies to install all the example / test suite deps:
+Clone the nodetoo repo, then install the dev dependencies:
 
     $ git clone git://github.com/fliptoo/nodetoo.git --depth 1
     $ cd nodetoo
     $ npm install
 
-then run whichever tests you want:
+and run whichever examples you want:
 
     $ node examples/basic
 
