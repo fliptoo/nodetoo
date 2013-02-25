@@ -144,6 +144,7 @@ home.about
 
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">auth</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roles</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// retrieve user from session</span>
     <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">401</span><span class="p">).</span><span class="nx">render</span><span class="p">(</span><span class="s1">'401'</span><span class="p">);</span>
@@ -161,25 +162,25 @@ home.about
 
 <p>But how you write the authenticator, it is really up to you.</p>
 
-<h2>Viewing Examples</h2>
+<h2>Examples</h2>
 
-<p>Clone the Express repo, then install the dev dependencies to install all the example / test suite deps:</p>
+<p>Clone the nodetoo repo, then install the dev dependencies:</p>
 
-<pre><code>$ git clone git://github.com/visionmedia/express.git --depth 1
-$ cd express
+<pre><code>$ git clone git://github.com/fliptoo/nodetoo.git --depth 1
+$ cd nodetoo
 $ npm install
 </code></pre>
 
-<p>then run whichever tests you want:</p>
+<p>and run whichever examples you want:</p>
 
-<pre><code>$ node examples/content-negotiation
+<pre><code>$ node examples/basic
 </code></pre>
 
 <h2>License</h2>
 
 <p>(The MIT License)</p>
 
-<p>Copyright (c) 2009-2012 TJ Holowaychuk &lt;<a href="mailto:tj@vision-media.ca">tj@vision-media.ca</a>&gt;</p>
+<p>Copyright (c) 2013 Fliptoo &lt;<a href="mailto:fliptoo.studio@gmail.com">fliptoo.studio@gmail.com</a>&gt;</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
