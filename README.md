@@ -166,7 +166,7 @@ and run whichever examples you want:
 # Credits
 
 - [Express](https://github.com/visionmedia/express)
-- [i18n](https://github.com/mashpie/i18n-node/)
+- [i18n-node](https://github.com/mashpie/i18n-node/)
 
 ## License
 
