@@ -1,13 +1,8 @@
 
-/**
- * Module dependencies.
- */
-
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , user = require('./app/models/user');
-
+var express = require('express');
+var http = require('http');
+var path = require('path');
+var user = require('./app/models/user');
 var app = express();
 
 app.configure(function(){
