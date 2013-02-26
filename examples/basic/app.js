@@ -2,6 +2,7 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var nodetoo = require('../../');
 var app = express();
 
 app.configure(function(){
@@ -13,7 +14,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   
   // boostrap nodetoo
-  require('../../')(app, __dirname + '/app');
+  nodetoo.boostrap(app);
   
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));

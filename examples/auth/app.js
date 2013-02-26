@@ -3,6 +3,7 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var user = require('./app/models/user');
+var nodetoo = require('../../');
 var app = express();
 
 app.configure(function(){
@@ -16,7 +17,7 @@ app.configure(function(){
   app.use(express.session());
 
   // botstrap nodetoo
-  require('../../')(app, __dirname + '/app', user.auth);
+  nodetoo.boostrap(app, user.auth);
 
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));

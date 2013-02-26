@@ -12,10 +12,10 @@
     , "mkdirp": "*"
     , "underscore": "*"
     , "sprintf": "*"
+    , "express": "*"
   },
   "devDependencies": {
-      "express": "*"
-    , "jade": "*"
+    "jade": "*"
   },
   "keywords": [
     "express",
