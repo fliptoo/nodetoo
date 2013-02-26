@@ -29,7 +29,7 @@ app.configure(function(){
   ...
   
   // boostrap nodetoo
-  require('../../')(app, __dirname + '/app');
+  require('../../')(app);
   
   app.use(app.router);
   ...
@@ -128,7 +128,7 @@ module.exports = [
 
 ## Authentication
 
-nodetoo take a 3rd argument as the authentication middleware (authenticator).
+nodetoo take a 2nd argument as the authentication middleware (authenticator).
 
 ```js
 var auth = function(roles) {
