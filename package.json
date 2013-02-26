@@ -8,12 +8,14 @@
     "nodetoo": "./bin/nodetoo"
   },
   "dependencies": {
-      "underscore": "*"
-    , "commander": "*"
+      "commander": "*"
     , "mkdirp": "*"
+    , "underscore": "*"
+    , "sprintf": "*"
   },
   "devDependencies": {
-      "jade": "*"
+      "express": "*"
+    , "jade": "*"
   },
   "keywords": [
     "express",

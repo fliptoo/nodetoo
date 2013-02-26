@@ -40,6 +40,25 @@ var routes = [
   , ']'
 ].join(eol);
 
+// Setting template
+var setting = [
+    ''
+  , 'var env = process.env.NODE_ENV || \'development\''
+  , 'var setting = {'
+  , '  development: {'
+  , '    db: \'mongodb://localhost:27017/nodetoo\','
+  , '    i18n: {'
+  , '      locales: ['en', 'zh-CN']'
+  , '    }'
+  , '  }'
+  , ', production: {'
+  , '  }'
+  , '}'
+  , ''
+  , 'module.exports = setting[env];'
+  , ''
+].join(eol);
+
 // Controller template
 var home = [
     ''
@@ -146,9 +165,6 @@ function createApp() {
     // create app
     mkdir(path + '/app', function(){
 
-      // create routes
-      write(path + '/app/routes.js', routes);
-
       // create models
       mkdir(path + '/app/models', function(){
       });
@@ -172,6 +188,17 @@ function createApp() {
         });
       });
     });
+
+    // create config
+    mkdir(path + '/config', function(){
+
+      // create routes
+      write(path + '/config/routes.js', routes);
+
+      // create setting
+      write(path + '/config/setting.js', setting);
+    });
+
   });
 }
 

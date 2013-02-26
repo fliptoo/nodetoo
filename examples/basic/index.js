@@ -16,6 +16,8 @@ app.configure(function(){
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
+  // boostrap nodetoo
+  require('../../')(app, __dirname + '/app');
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -23,9 +25,6 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
-
-// boostrap nodetoo
-require('../../')(app, __dirname + '/app');
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('     Express + MVC = nodetoo');
