@@ -162,6 +162,11 @@ and run whichever examples you want:
 
     $ cd examples/basic
     $ node app
+    
+# Credits
+
+- [Express](https://github.com/visionmedia/express)
+- [i18n](https://github.com/mashpie/i18n-node/)
 
 ## License
 
