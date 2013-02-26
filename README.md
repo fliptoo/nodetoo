@@ -160,7 +160,8 @@ Clone the nodetoo repo, then install the dev dependencies:
 
 and run whichever examples you want:
 
-    $ node examples/basic
+    $ cd examples/basic
+    $ node app
 
 ## License
 
