@@ -10,7 +10,7 @@ Inspired by [Express mvc example](https://github.com/visionmedia/express/tree/ma
 
 Assuming you have created a `project` with Express, please refer [here](http://expressjs.com/guide.html) for the guide.  
 
-- Create the `app/`
+- Create the app
 
 ```
 $ cd /project
@@ -25,8 +25,15 @@ var express = require('express');
 var nodetoo = require('nodetoo');
 var app = express();
 
-// bootstrap nodetoo
-nodetoo(app, __dirname + '/app');
+app.configure(function(){
+  ...
+  
+  // boostrap nodetoo
+  require('../../')(app, __dirname + '/app');
+  
+  app.use(app.router);
+  ...
+});
 
 app.listen(3000);
 ```
@@ -39,7 +46,7 @@ $ node app
 
 ## Project Structure
 
-nodetoo only work on the `app/` folder
+nodetoo only work on the `app/` and `config/` folder
 
 ```
 app/
@@ -51,7 +58,9 @@ app/
   views/
     home/
       index.jade
-  routes.js
+config/
+    routes.js
+    setting.js
 ```
 
 ## Models
