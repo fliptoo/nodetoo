@@ -39,8 +39,7 @@
 <p>Assuming you have created a <code>project</code> with Express, please refer <a href="http://expressjs.com/guide.html">here</a> for the guide.  </p>
 
 <ul>
-<li>Create the <code>app/</code>
-</li>
+<li>Create the app</li>
 </ul><pre><code>$ cd /project
 $ npm install nodetoo
 $ nodetoo
@@ -52,8 +51,15 @@ $ nodetoo
 <span class="kd">var</span> <span class="nx">nodetoo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'nodetoo'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
 
-<span class="c1">// bootstrap nodetoo</span>
-<span class="nx">nodetoo</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/app'</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="p">...</span>
+
+  <span class="c1">// boostrap nodetoo</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">'../../'</span><span class="p">)(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/app'</span><span class="p">);</span>
+
+  <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">);</span>
+  <span class="p">...</span>
+<span class="p">});</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
 </pre></div>
@@ -65,7 +71,7 @@ $ nodetoo
 
 <h2>Project Structure</h2>
 
-<p>nodetoo only work on the <code>app/</code> folder</p>
+<p>nodetoo only work on the <code>app/</code> and <code>config/</code> folder</p>
 
 <pre><code>app/
   controllers/
@@ -76,7 +82,9 @@ $ nodetoo
   views/
     home/
       index.jade
-  routes.js
+config/
+    routes.js
+    setting.js
 </code></pre>
 
 <h2>Models</h2>
@@ -173,10 +181,16 @@ $ npm install
 
 <p>and run whichever examples you want:</p>
 
-<pre><code>$ node examples/basic
+<pre><code>$ cd examples/basic
+$ node app
 </code></pre>
 
-<h2>License</h2>
+<h1>Credits</h1>
+
+<ul>
+<li><a href="https://github.com/visionmedia/express">Express</a></li>
+<li><a href="https://github.com/mashpie/i18n-node/">i18n-node</a></li>
+</ul><h2>License</h2>
 
 <p>(The MIT License)</p>
 
