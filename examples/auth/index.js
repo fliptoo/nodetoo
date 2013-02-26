@@ -19,6 +19,10 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser('nodetoo'));
   app.use(express.session());
+
+  // botstrap nodetoo
+  require('../../')(app, __dirname + '/app', user.auth);
+
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -26,9 +30,6 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
-
-// botstrap nodetoo
-require('../../')(app, __dirname + '/app', user.auth);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('     Express + MVC = nodetoo');
