@@ -1,6 +1,5 @@
 
-var env = process.env.NODE_ENV || 'development'
-var setting = {
+module.exports = {
     development: {
       db: 'mongodb://localhost:27017/nodetoo',
       i18n: {
@@ -9,9 +8,6 @@ var setting = {
       }
     }
   , production: {
-
+      
     }
 }
-
-// Export module
-module.exports = setting[env];
