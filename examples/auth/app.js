@@ -15,8 +15,8 @@ app.configure(function(){
   app.use(express.cookieParser('nodetoo'));
   app.use(express.session());
 
-  // botstrap nodetoo
-  nodetoo.boostrap(app);
+  // bootstrap nodetoo
+  nodetoo.bootstrap(app);
 
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));

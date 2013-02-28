@@ -13,8 +13,8 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   
-  // boostrap nodetoo
-  nodetoo.boostrap(app);
+  // bootstrap nodetoo
+  nodetoo.bootstrap(app);
   
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));

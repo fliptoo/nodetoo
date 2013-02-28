@@ -1,7 +1,7 @@
 {
   "name": "nodetoo",
   "description": "Express + MVC = {nodetoo}",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": "fliptoo <fliptoo.studio@gmail.com>",
   "main": "./index",
   "bin": {

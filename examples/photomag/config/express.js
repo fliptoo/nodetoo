@@ -27,8 +27,8 @@ exports.bootstrap = function (app) {
     app.use(passport.session());
     app.use(express.favicon());
 
-    // boostrap nodetoo
-    nodetoo.boostrap(app);
+    // bootstrap nodetoo
+    nodetoo.bootstrap(app);
 
     app.use(app.router);
     app.use(require('stylus').middleware(setting.root + '/public'));
