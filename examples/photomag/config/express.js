@@ -28,7 +28,7 @@ exports.bootstrap = function (app) {
     app.use(express.favicon());
 
     // boostrap nodetoo
-    nodetoo.boostrap(app, require('../config/passport').auth);
+    nodetoo.boostrap(app);
 
     app.use(app.router);
     app.use(require('stylus').middleware(setting.root + '/public'));
