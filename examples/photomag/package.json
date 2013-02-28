@@ -15,6 +15,7 @@
     , "connect-flash": "*"
     , "passport": "*"
     , "passport-local": "*"
+    , "passport-facebook": "*"
     , "underscore": "*"
   }
 }

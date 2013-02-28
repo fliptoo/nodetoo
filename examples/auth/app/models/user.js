@@ -29,26 +29,6 @@ var users = [
 ]
 
 /**
- * Authentication base on roles
- * @param  {Array} roles
- * @return {[Function]}       
- */
-exports.auth = function(roles) {
-  return function (req, res, next) {
-    // retrieve user from session
-    var user = req.session.user;
-    if (user === undefined) {
-      res.status(401).render('401');
-    } 
-    // asterisk skip authorization
-    else if (!_.contains(roles, '*') 
-          && !_.intersection(user.roles, roles).length > 0) {
-      res.status(401).render('401');
-    } else next();
-  }
-}
-
-/**
  * Login with username and password
  * @param  {String}   username 
  * @param  {String}   password 

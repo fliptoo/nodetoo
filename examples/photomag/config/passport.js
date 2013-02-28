@@ -1,9 +1,12 @@
 
+var setting = require('../../../').setting;
 var mongoose = require('mongoose');
 var passport = require('passport');
+var _ = require('underscore');
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 
-exports.auth = function (roles) {
+exports.auth = function(roles) {
   return function (req, res, next) {
     if (!req.isAuthenticated()) {
       // remember url
@@ -22,7 +25,7 @@ exports.auth = function (roles) {
   }
 }
 
-exports.bootstrap = function (app) {
+exports.bootstrap = function(app) {
   
   var User = mongoose.model('User');
   
@@ -56,11 +59,52 @@ exports.bootstrap = function (app) {
     }
   ))
 
-  app.post('/login', passport.authenticate(
-      'local', { failureRedirect: '/login', failureFlash: true })
-    , function(req, res) { 
-      var originalUrl = req.flash('originalUrl');
-      res.redirect(originalUrl != undefined ? '' + originalUrl : '/');
+  // use facebook strategy
+  passport.use(new FacebookStrategy({
+        clientID: setting.facebook.clientID
+      , clientSecret: setting.facebook.clientSecret
+      , callbackURL: setting.facebook.callbackURL
+    },
+    function(accessToken, refreshToken, profile, done) {
+      User.findOne({ 'facebook.id': profile.id }, function (err, user) {
+        if (err) { return done(err) }
+        if (!user) {
+          user = new User({
+              name: profile.displayName
+            , email: profile.emails[0].value
+            , username: profile.username
+            , provider: 'facebook'
+            , facebook: profile._json
+          })
+          user.save(function (err) {
+            if (err) console.log(err)
+            return done(err, user)
+          })
+        }
+        else {
+          return done(err, user)
+        }
+      })
     }
-  );
+  ))
+
+  // app.post('/login', passport.authenticate(
+  //     'local', { failureRedirect: '/login', failureFlash: true })
+  //   , function(req, res) { 
+  //     var originalUrl = req.flash('originalUrl');
+  //     res.redirect(originalUrl != undefined ? '' + originalUrl : '/');
+  //   }
+  // );
+
+  // app.get('/auth/facebook', passport.authenticate(
+  //     'facebook', { scope: setting.facebook.permissions, failureRedirect: '/login', failureFlash: true })
+  // );
+
+  // app.get('/auth/facebook/callback', passport.authenticate(
+  //     'facebook', { scope: setting.facebook.permissions, failureRedirect: '/login' })
+  //   , function(req, res) { 
+  //     var originalUrl = req.flash('originalUrl');
+  //     res.redirect(originalUrl != undefined ? '' + originalUrl : '/');
+  //   }
+  // );
 }
