@@ -1,6 +1,4 @@
 
-var _ = require('underscore');
-
 /**
  * User Database
  * @type {Array}

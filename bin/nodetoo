@@ -45,6 +45,7 @@ var setting = [
     ''
   , 'module.exports = {'
   , '  development: {'
+  , '    authenticator: \'\''
   , '    i18n: {'
   , '      locales: [\'en\', \'zh-CN\']'
   , '    }'
@@ -183,6 +184,14 @@ function createApp() {
 
     // create config
     mkdir(path + '/config', function(){
+
+      // create plugins
+      mkdir(path + '/config/plugins', function(){
+      });
+
+      // create injections
+      mkdir(path + '/app/injections', function(){
+      });
 
       // create routes
       write(path + '/config/routes.js', routes);
