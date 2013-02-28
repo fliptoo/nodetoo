@@ -8,7 +8,7 @@ module.exports = [
         , ['/logout'                  ,'get'  ,'home.logout']
         , ['/auth/local'              ,'post' ,'home.localAuth']
         , ['/auth/facebook'           ,'get'  ,'home.fbAuth']
-        , ['/auth/facebook/callback'  ,'get'  ,'home.fbAuthCalback']
+        , ['/auth/facebook/callback'  ,'get'  ,'home.fbAuthCalback',  ['fbPassport']]
     ]}
 
   , { roles  : ['*'],

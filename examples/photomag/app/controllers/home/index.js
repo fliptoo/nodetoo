@@ -1,24 +1,7 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var passport = require("passport");
-var setting = require("../../../../../").setting;
-
-// middlewares
-var localPassport = passport.authenticate('local', { 
-      failureRedirect: '/login'
-    , failureFlash: true 
-  });
-
-var fbPassport = passport.authenticate('facebook', { 
-      scope: setting.facebook.permissions
-    , failureRedirect: '/login'
-    , failureFlash: true 
-  });
-
-exports.middlewares = {
-    localAuth: [localPassport]
-  , fbAuthCalback: [fbPassport]
-};
+var nodetoo = require("../../../../../");
 
 var afterAuth = function(req, res) {
   var originalUrl = req.flash('originalUrl');
@@ -65,7 +48,7 @@ exports.localAuth = function(req, res) {
   afterAuth(req, res);
 };
 
-exports.fbAuth = fbPassport;
+exports.fbAuth = nodetoo.inject['fbPassport'];
 
 exports.fbAuthCalback = function(req, res) {
     afterAuth(req, res);
