@@ -55,11 +55,14 @@ $ nodetoo
   <span class="p">...</span>
 
   <span class="c1">// boostrap nodetoo</span>
-  <span class="nx">require</span><span class="p">(</span><span class="s1">'../../'</span><span class="p">)(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/app'</span><span class="p">);</span>
+  <span class="nx">nodetoo</span><span class="p">.</span><span class="nx">bootstrap</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
 
   <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">);</span>
   <span class="p">...</span>
 <span class="p">});</span>
+
+<span class="c1">// remove any existing route</span>
+<span class="p">...</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span>
 </pre></div>
@@ -83,6 +86,8 @@ $ nodetoo
     home/
       index.jade
 config/
+    injections/
+    plugins/
     routes.js
     setting.js
 </code></pre>
@@ -122,35 +127,55 @@ home.about
 
 <h2>Routes</h2>
 
-<p>Routes are defined in the <code>app/route.js</code> file</p>
+<p>Routes are defined in the <code>config/routes.js</code> file</p>
 
 <div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
 <span class="c1">// public routes  </span>
   <span class="p">{</span> <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/'</span>                        <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">]</span>
-      <span class="p">,</span> <span class="p">[</span><span class="s1">'/login'</span>                   <span class="p">,</span><span class="s1">'all'</span>  <span class="p">,</span><span class="s1">'user.login'</span><span class="p">]</span>
-      <span class="p">,</span> <span class="p">[</span><span class="s1">'/logout'</span>                  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'user.logout'</span><span class="p">]</span>
+        <span class="p">[</span><span class="s1">'/'</span>        <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">]</span>
+      <span class="p">,</span> <span class="p">[</span><span class="s1">'/login'</span>   <span class="p">,</span><span class="s1">'all'</span>  <span class="p">,</span><span class="s1">'user.login'</span><span class="p">]</span>
+      <span class="p">,</span> <span class="p">[</span><span class="s1">'/logout'</span>  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'user.logout'</span><span class="p">]</span>
   <span class="p">]}</span>
 
 <span class="c1">// user with any roles</span>
 <span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
     <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/anyone'</span>                  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'anyone.index'</span><span class="p">]</span>
+        <span class="p">[</span><span class="s1">'/anyone'</span>  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'anyone.index'</span><span class="p">]</span>
   <span class="p">]}</span>
 
 <span class="c1">// user with admin role only</span>
 <span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'admin'</span><span class="p">],</span>
     <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/admin'</span>                    <span class="p">,</span><span class="s1">'get'</span> <span class="p">,</span><span class="s1">'admin.index'</span><span class="p">]</span>
+        <span class="p">[</span><span class="s1">'/admin'</span>   <span class="p">,</span><span class="s1">'get'</span> <span class="p">,</span><span class="s1">'admin.index'</span><span class="p">]</span>
+  <span class="p">]}</span>
+<span class="p">]</span>
+</pre></div>
+
+<p>Middlewares can be use via <a href="#injections">injection</a></p>
+
+<pre><code>config/
+    injections/
+        check4name.js
+        check4age.js
+</code></pre>
+
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span><span class="s1">'/'</span>  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'check4name'</span><span class="p">,</span> <span class="s1">'check4age'</span><span class="p">]]</span>
   <span class="p">]}</span>
 <span class="p">]</span>
 </pre></div>
 
 <h2>Authentication</h2>
 
-<p>nodetoo take a 3rd argument as the authentication middleware (authenticator).</p>
+<p>When roles is configured in <code>routes.js</code>, {nodetoo} will ask for an authenticator via <a href="#injections">injection</a>.</p>
 
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">auth</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roles</span><span class="p">)</span> <span class="p">{</span>
+<pre><code>config/
+    injections/
+        authenticator.js
+</code></pre>
+
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">roles</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// retrieve user from session</span>
     <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
@@ -164,11 +189,33 @@ home.about
     <span class="p">}</span> <span class="k">else</span> <span class="nx">next</span><span class="p">();</span>
   <span class="p">}</span>
 <span class="p">}</span>
-
-<span class="nx">nodetoo</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">'/app'</span><span class="p">,</span> <span class="nx">auth</span><span class="p">);</span>
 </pre></div>
 
-<p>But how you write the authenticator, it is really up to you.</p>
+<p>But how you write the authenticator, it is really up to you. 
+Please refer to the <a href="https://github.com/fliptoo/nodetoo/tree/master/examples/auth">example</a>.</p>
+
+<h2>Injections</h2>
+
+<p>Any module under <code>injections/</code> folder can be inject with the module filename without the extension.</p>
+
+<pre><code>config/
+    injections/
+        module.js
+</code></pre>
+
+<pre><code>var module = inject('module');
+</code></pre>
+
+<p>PS: Actually nothing special with the injection, it is just a global function as <code>require</code>.</p>
+
+<h2>Plugins</h2>
+
+<p>Any module under <code>plugins/</code> folder will be installed as a plugin.</p>
+
+<pre><code>config/
+    plugins/
+        extra.js
+</code></pre>
 
 <h2>Examples</h2>
 
