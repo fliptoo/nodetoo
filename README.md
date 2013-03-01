@@ -150,10 +150,16 @@ module.exports = [
 
 ## Authentication
 
-nodetoo take a 2nd argument as the authentication middleware (authenticator).
+When roles is configured in `routes.js`, {nodetoo} will ask for an authenticator via [injection](#injections).
+
+```
+config/
+    injections/
+        authenticator.js
+```
 
 ```js
-var auth = function(roles) {
+module.exports = function(roles) {
   return function (req, res, next) {
     // retrieve user from session
     var user = req.session.user;
@@ -167,10 +173,9 @@ var auth = function(roles) {
     } else next();
   }
 }
-
-nodetoo(app, __dirname + '/app', auth);
 ```
-But how you write the authenticator, it is really up to you.
+But how you write the authenticator, it is really up to you. 
+Please refer to the [example](https://github.com/fliptoo/nodetoo/tree/master/examples/auth).
 
 ## Injections
 
@@ -187,6 +192,16 @@ var module = inject('module');
 ```
 
 PS: Actually nothing special with the injection, it is just a global function as `require`.
+
+## Plugins
+
+Any module under `plugins/` folder will be installed as a plugin.
+
+```
+config/
+    plugins/
+        extra.js
+```
 
 ## Examples
 
