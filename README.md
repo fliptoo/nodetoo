@@ -29,11 +29,14 @@ app.configure(function(){
   ...
   
   // boostrap nodetoo
-  require('../../')(app);
+  nodetoo.bootstrap(app);
   
   app.use(app.router);
   ...
 });
+
+// remove any existing route
+...
 
 app.listen(3000);
 ```
@@ -59,6 +62,8 @@ app/
     home/
       index.jade
 config/
+    injections/
+    plugins/
     routes.js
     setting.js
 ```
@@ -101,27 +106,44 @@ home.about
 
 ## Routes
 
-Routes are defined in the `app/route.js` file
+Routes are defined in the `config/routes.js` file
 
 ```js
 module.exports = [
 // public routes  
   { routes : [
-        ['/'                        ,'get'  ,'home.index']
-      , ['/login'                   ,'all'  ,'user.login']
-      , ['/logout'                  ,'get'  ,'user.logout']
+        ['/'        ,'get'  ,'home.index']
+      , ['/login'   ,'all'  ,'user.login']
+      , ['/logout'  ,'get'  ,'user.logout']
   ]}
 
 // user with any roles
 , { roles  : ['*'],
     routes : [
-        ['/anyone'                  ,'get'  ,'anyone.index']
+        ['/anyone'  ,'get'  ,'anyone.index']
   ]}
 
 // user with admin role only
 , { roles  : ['admin'],
     routes : [
-        ['/admin'                    ,'get' ,'admin.index']
+        ['/admin'   ,'get' ,'admin.index']
+  ]}
+]
+```
+
+Middlewares can be use via [injection](Injections)
+
+```
+config/
+    injections/
+        check4name.js
+        check4age.js
+```
+
+```js
+module.exports = [
+  { routes : [
+        ['/'  ,'get'  ,'home.index', ['check4name', 'check4age']]
   ]}
 ]
 ```
@@ -149,6 +171,22 @@ var auth = function(roles) {
 nodetoo(app, __dirname + '/app', auth);
 ```
 But how you write the authenticator, it is really up to you.
+
+## Injections
+
+Any module under `injections/` folder can be inject with the module filename without the extension.
+
+```
+config/
+    injections/
+        module.js
+```
+
+```
+var module = inject('module');
+```
+
+PS: Actually nothing special with the injection, it is just a global function as `require`.
 
 ## Examples
 
