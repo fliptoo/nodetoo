@@ -13,10 +13,10 @@
     , "xtend": "*"
     , "underscore": "*"
     , "sprintf": "*"
-    , "express": "*"
   },
   "devDependencies": {
-    "jade": "*"
+      "express": "*"
+    , "jade": "*"
   },
   "keywords": [
     "express",

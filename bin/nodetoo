@@ -45,7 +45,6 @@ var setting = [
     ''
   , 'module.exports = {'
   , '  development: {'
-  , '    authenticator: \'\','
   , '    i18n: {'
   , '      locales: [\'en\', \'zh-CN\']'
   , '    }'
@@ -105,7 +104,7 @@ var jadeAbout = [
     if (empty || program.force) {
       createApplicationAt(path);
     } else {
-      program.confirm('destination is not empty, continue? ', function(ok){
+      program.confirm('destination has \'app\' or \'config\' folder, continue to replace them? ', function(ok){
         if (ok) {
           process.stdin.destroy();
           createApplicationAt(path);
@@ -212,7 +211,13 @@ function createApp() {
 function emptyDirectory(path, fn) {
   fs.readdir(path, function(err, files){
     if (err && 'ENOENT' != err.code) throw err;
-    fn(!files || !files.length);
+    var empty = true;
+    if (files && files.length) {
+      files.forEach(function (file) {
+        if (file === 'app' || file === 'config') empty = false;
+      });
+    }
+    fn(empty);
   });
 }
 

@@ -48,7 +48,7 @@ exports.localAuth = function(req, res) {
   afterAuth(req, res);
 };
 
-exports.fbAuth = nodetoo.inject('fbPassport');
+exports.fbAuth = inject('fbPassport');
 
 exports.fbAuthCalback = function(req, res) {
     afterAuth(req, res);
