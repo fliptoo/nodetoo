@@ -2,7 +2,6 @@
 module.exports = {
     development: {
         root: require('path').normalize(__dirname + '/..')
-      , authenticator: 'authenticator'
       , db: 'mongodb://localhost:27017/photomag'
       , secret: 'photomag_secret'
       , i18n: {
