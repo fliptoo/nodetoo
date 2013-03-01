@@ -131,7 +131,7 @@ module.exports = [
 ]
 ```
 
-Middlewares can be use via [injection](#Injections)
+Middlewares can be use via [injection](#injections)
 
 ```
 config/
