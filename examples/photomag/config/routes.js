@@ -1,18 +1,6 @@
 
-module.exports = [
-    { routes : [
-          ['/'                        ,'get'  ,'home.index']
-        , ['/signup'                  ,'get'  ,'home.signup']
-        , ['/signup'                  ,'post' ,'home.signup']
-        , ['/login'                   ,'get'  ,'home.login']
-        , ['/logout'                  ,'get'  ,'home.logout']
-        , ['/auth/local'              ,'post' ,'home.localAuth']
-        , ['/auth/facebook'           ,'get'  ,'home.fbAuth']
-        , ['/auth/facebook/callback'  ,'get'  ,'home.fbAuthCalback',  ['fbPassport']]
-    ]}
+var _ = require('underscore');
+var web = require('./routes/web');
+var api = require('./routes/api');
 
-  , { roles  : ['*'],
-      routes : [
-          ['/about'                   ,'get'  ,'home.about']
-    ]}
-]
+module.exports = _.union(web, api);
