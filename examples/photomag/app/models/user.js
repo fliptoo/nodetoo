@@ -95,4 +95,4 @@ User.methods.encryptPassword = function(password) {
  * Compile Model
  */
 
-mongoose.model('User', User)
+mongoose.model('User', User);

@@ -2,7 +2,7 @@ extends ../layouts/main
 
 block content
   form.login.form-horizontal(action="/auth/local", method="post")
-    //p.error= message
+    p.error= feedback
     .control-group
       label.control-label(for='email') Email
       .controls

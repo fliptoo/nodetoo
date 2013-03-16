@@ -5,6 +5,7 @@ var mongoStore = require('connect-mongo')(express);
 var flash = require('connect-flash');
 var nodetoo = require('../../../');
 var setting = nodetoo.setting;
+var swagger = require('./swagger');
 
 exports.bootstrap = function (app) {
   app.configure(function(){
@@ -12,6 +13,8 @@ exports.bootstrap = function (app) {
     app.set('port', process.env.VMC_APP_PORT || 3000);
     app.set('view engine', 'jade');
     app.use(express.compress());
+    app.use(express.favicon());
+    app.use(express.static(setting.root + '/public'));
     app.use(express.logger('dev'));
     app.use(express.cookieParser())
     app.use(express.bodyParser());
@@ -25,17 +28,15 @@ exports.bootstrap = function (app) {
     app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use(express.favicon());
 
     // bootstrap nodetoo
     nodetoo.bootstrap(app);
-
     app.use(app.router);
     app.use(require('stylus').middleware(setting.root + '/public'));
-    app.use(express.static(setting.root + '/public'));
   });
 
   app.configure('development', function(){
+    //swagger.bootstrap(app);
     app.use(express.errorHandler());
   });
 

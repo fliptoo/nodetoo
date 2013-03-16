@@ -1,11 +1,21 @@
 
 var https = require('https');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
 
-exports.fb = function(req, res) {
-  var token = req.param('token');
-  var id = req.param('id');
-  check(token, id, validate(res));
-};
+exports.actions = {
+  
+  logout: function (req, res) {
+    req.logout();
+    res.send('Settle');
+  },
+
+  fb: function (req, res) {
+    var token = req.param('token');
+    var id = req.param('id');
+    check(token, id, validate(id, req, res));
+  },
+}
 
 function check(token, id, fn) {
   var options = {
@@ -37,7 +47,7 @@ function check(token, id, fn) {
   });
 }
 
-function validate(res) {
+function validate(id, req, res) {
   return function (status, result, err) {
     if (err) {
       res.send(err);
@@ -46,7 +56,36 @@ function validate(res) {
 
     if (status === 200) {
       var profile = JSON.parse(result);
-      res.send(id + ' | ' + profile.id);
+      var valid = id === profile.id;
+      if (valid) {
+        User.findOne({ 'facebook.id': profile.id }, function (err, user) {
+          if (err) { return res.send(err) }
+          if (!user) {
+            user = new User({
+                name: profile.displayName
+              , email: profile.emails[0].value
+              , username: profile.username
+              , roles: ['user']
+              , provider: 'facebook'
+              , facebook: profile._json
+            })
+            user.save(function (err) {
+              req.logIn(user, function (err) {
+               if (err) { throw err; }
+               res.send(req.isAuthenticated());
+              });
+            })
+          }
+          else {
+            req.logIn(user, function (err) {
+             if (err) { throw err; }
+             res.send(req.isAuthenticated());
+            });
+          }
+        })
+      } else {
+        res.send(false);
+      }
     } else {
       res.send(status, result);
     };

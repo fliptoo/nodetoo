@@ -1,12 +1,19 @@
 
-/*
- * GET users listing.
- */
+exports.before = function (req, res, next) {
+  console.log('[BEFORE]: ' + req.url);
+  next();
+}
 
-exports.index = function(req, res){
-  res.render('home/index')
-};
+exports.actions = {
+  
+  index: function (req, res) {
+    res.render('home/index');
+  },
 
-exports.about = function(req, res){
-  res.render('home/about');
-};
+  about: {
+    before: ['watcher', 'logger'],
+    action: function (req, res) {
+      res.render('home/about');
+    }
+  }
+}

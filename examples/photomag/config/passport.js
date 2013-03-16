@@ -68,24 +68,4 @@ exports.bootstrap = function(app) {
       })
     }
   ))
-
-  // app.post('/login', passport.authenticate(
-  //     'local', { failureRedirect: '/login', failureFlash: true })
-  //   , function(req, res) { 
-  //     var originalUrl = req.flash('originalUrl');
-  //     res.redirect(originalUrl != undefined ? '' + originalUrl : '/');
-  //   }
-  // );
-
-  // app.get('/auth/facebook', passport.authenticate(
-  //     'facebook', { scope: setting.facebook.permissions, failureRedirect: '/login', failureFlash: true })
-  // );
-
-  // app.get('/auth/facebook/callback', passport.authenticate(
-  //     'facebook', { scope: setting.facebook.permissions, failureRedirect: '/login' })
-  //   , function(req, res) { 
-  //     var originalUrl = req.flash('originalUrl');
-  //     res.redirect(originalUrl != undefined ? '' + originalUrl : '/');
-  //   }
-  // );
 }

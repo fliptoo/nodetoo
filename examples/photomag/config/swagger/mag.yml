@@ -1,0 +1,72 @@
+resourcePath: /mag
+apis: 
+
+- path: /api/mag/list
+  operations:
+
+  - httpMethod: GET
+    nickname: list
+    parameters:
+
+- path: /api/mag/delete
+  operations:
+
+  - httpMethod: DELETE
+    nickname: delete
+    parameters:
+
+    - name: id
+      dataType: long 
+      paramType: query
+      required: true
+      description: "Mag id"
+
+- path: /api/mag/create
+  operations:
+
+  - httpMethod: POST
+    nickname: create
+    consumes: ["html/text"]
+    parameters:
+
+    - name: name
+      dataType: string
+      paramType: query
+      required: true
+      description: "Mag name"
+
+    - name: code
+      dataType: string
+      paramType: query
+      required: true
+      description: "Mag code"
+
+    - name: about
+      dataType: string
+      paramType: query
+      required: true
+      description: "Write something about your mag"
+
+- path: /api/mag/insertPage
+  operations:
+
+  - httpMethod: POST
+    nickname: insertPage
+    parameters:
+
+    - name: id
+      dataType: long
+      paramType: query
+      required: true
+      description: "Mag id"
+
+    - name: index
+      dataType: int
+      paramType: query
+      description: "Page index"
+
+    - name: image
+      dataType: file
+      paramType: query
+      required: true
+      description: "Mag page"
