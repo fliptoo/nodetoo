@@ -107,14 +107,123 @@ config/
 <p>Each folder under <code>controllers/</code> is a controller, <code>index.js</code> represent the js file.<br>
 Let's take a look at the <code>controllers/home/index.js</code> file.</p>
 
-<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/index'</span><span class="p">,</span> <span class="p">{</span><span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-<span class="p">};</span>
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">actions</span> <span class="o">=</span> <span class="p">{</span>
 
-<span class="nx">exports</span><span class="p">.</span><span class="nx">about</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/about'</span><span class="p">);</span>
+  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/index'</span><span class="p">);</span>
+  <span class="p">},</span>
+
+  <span class="nx">about</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/about'</span><span class="p">);</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+
+<p><strong>Filters</strong> are middlewares that run before the action function.</p>
+
+<p>Exports as a function <code>before</code>.</p>
+
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">before</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'[BEFORE]: '</span> <span class="o">+</span> <span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+  <span class="nx">next</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">actions</span> <span class="o">=</span> <span class="p">{</span>
+
+  <span class="nx">index</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/index'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Exports as an object <code>before</code>, support <a href="#injections">injection</a>.</p>
+
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">before</span> <span class="o">=</span> <span class="p">{</span>
+
+  <span class="nx">all</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">middlewares</span><span class="o">:</span> <span class="p">[</span><span class="s1">'logger'</span><span class="p">],</span>
+      <span class="nx">except</span><span class="o">:</span> <span class="p">[</span><span class="s1">'login'</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nx">only</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> 
+      <span class="nx">middlewares</span><span class="o">:</span> <span class="p">[</span><span class="s1">'watcher'</span><span class="p">],</span>
+      <span class="nx">actions</span><span class="o">:</span> <span class="p">[</span><span class="s1">'login'</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
 <span class="p">};</span>
+</pre></div>
+
+<pre><code>All actions will use `logger` except `login` action.
+Only `login` action will use `watcher`.
+</code></pre>
+
+<p>Define at action and it will be given priority.</p>
+
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">actions</span> <span class="o">=</span> <span class="p">{</span>
+
+  <span class="nx">index</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">before</span><span class="o">:</span> <span class="p">[</span><span class="s1">'watcher'</span><span class="p">,</span> <span class="s1">'logger'</span><span class="p">],</span>
+    <span class="nx">action</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/index'</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Here is the injections</p>
+
+<pre><code>config/
+    injections/
+        logger.js
+        watcher.js
+</code></pre>
+
+<p><strong>Roles</strong> are use in <a href="#authentication">Authentication</a> process.</p>
+
+<p>Exports as an object <code>roles</code>.</p>
+
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">roles</span> <span class="o">=</span> <span class="p">{</span>
+
+  <span class="nx">all</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">roles</span><span class="o">:</span> <span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
+      <span class="nx">except</span><span class="o">:</span> <span class="p">[</span><span class="s1">'login'</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nx">only</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">roles</span><span class="o">:</span> <span class="p">[</span><span class="s1">'user'</span><span class="p">],</span>
+      <span class="nx">actions</span><span class="o">:</span> <span class="p">[</span><span class="s1">'createUser'</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">roles</span><span class="o">:</span> <span class="p">[</span><span class="s1">'admin'</span><span class="p">],</span>
+      <span class="nx">actions</span><span class="o">:</span> <span class="p">[</span><span class="s1">'createUser'</span><span class="p">]</span>
+    <span class="p">},</span>
+  <span class="p">]</span>
+<span class="p">};</span>
+</pre></div>
+
+<pre><code>All actions has role `*` except `login` action.
+Only `createUser` action has role `user`.
+Only `createUser` action has role `admin`.
+</code></pre>
+
+<p>PS: Role * apply to any roles, but it depend on how you write the authenticator.</p>
+
+<p>Define at action and it will be given priority.</p>
+
+<div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">actions</span> <span class="o">=</span> <span class="p">{</span>
+
+  <span class="nx">index</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">roles</span><span class="o">:</span> <span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
+    <span class="nx">action</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'home/index'</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 
 <h2>Actions</h2>
@@ -130,45 +239,14 @@ home.about
 <p>Routes are defined in the <code>config/routes.js</code> file</p>
 
 <div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
-<span class="c1">// public routes  </span>
-  <span class="p">{</span> <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/'</span>        <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">]</span>
-      <span class="p">,</span> <span class="p">[</span><span class="s1">'/login'</span>   <span class="p">,</span><span class="s1">'all'</span>  <span class="p">,</span><span class="s1">'user.login'</span><span class="p">]</span>
-      <span class="p">,</span> <span class="p">[</span><span class="s1">'/logout'</span>  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'user.logout'</span><span class="p">]</span>
-  <span class="p">]}</span>
-
-<span class="c1">// user with any roles</span>
-<span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'*'</span><span class="p">],</span>
-    <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/anyone'</span>  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'anyone.index'</span><span class="p">]</span>
-  <span class="p">]}</span>
-
-<span class="c1">// user with admin role only</span>
-<span class="p">,</span> <span class="p">{</span> <span class="nx">roles</span>  <span class="o">:</span> <span class="p">[</span><span class="s1">'admin'</span><span class="p">],</span>
-    <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/admin'</span>   <span class="p">,</span><span class="s1">'get'</span> <span class="p">,</span><span class="s1">'admin.index'</span><span class="p">]</span>
-  <span class="p">]}</span>
-<span class="p">]</span>
-</pre></div>
-
-<p>Middlewares can be use via <a href="#injections">injection</a></p>
-
-<pre><code>config/
-    injections/
-        check4name.js
-        check4age.js
-</code></pre>
-
-<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span> <span class="nx">routes</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">[</span><span class="s1">'/'</span>  <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'check4name'</span><span class="p">,</span> <span class="s1">'check4age'</span><span class="p">]]</span>
-  <span class="p">]}</span>
+    <span class="p">[</span><span class="s1">'/'</span>                        <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.index'</span><span class="p">]</span>
+  <span class="p">,</span> <span class="p">[</span><span class="s1">'/about'</span>                   <span class="p">,</span><span class="s1">'get'</span>  <span class="p">,</span><span class="s1">'home.about'</span><span class="p">]</span>
 <span class="p">]</span>
 </pre></div>
 
 <h2>Authentication</h2>
 
-<p>When roles is configured in <code>routes.js</code>, {nodetoo} will ask for an authenticator via <a href="#injections">injection</a>.</p>
+<p>When roles is configured, {nodetoo} will ask for an authenticator via <a href="#injections">injection</a>.</p>
 
 <pre><code>config/
     injections/
@@ -207,15 +285,6 @@ Please refer to the <a href="https://github.com/fliptoo/nodetoo/tree/master/exam
 </code></pre>
 
 <p>PS: Actually nothing special with the injection, it is just a global function as <code>require</code>.</p>
-
-<h2>Plugins</h2>
-
-<p>Any module under <code>plugins/</code> folder will be installed as a plugin.</p>
-
-<pre><code>config/
-    plugins/
-        extra.js
-</code></pre>
 
 <h2>Examples</h2>
 
