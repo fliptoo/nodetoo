@@ -17,7 +17,6 @@
     , "passport-local": "*"
     , "passport-facebook": "*"
     , "underscore": "*"
-    , "swagger-jack": "*"
-    , "js-yaml": "*"
+    , "swagger-express": "*"
   }
 }

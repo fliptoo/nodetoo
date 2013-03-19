@@ -5,7 +5,7 @@ var mongoStore = require('connect-mongo')(express);
 var flash = require('connect-flash');
 var nodetoo = require('../../../');
 var setting = nodetoo.setting;
-var swagger = require('./swagger');
+var swagger = require('swagger-express');
 
 exports.bootstrap = function (app) {
   app.configure(function(){
@@ -31,12 +31,19 @@ exports.bootstrap = function (app) {
 
     // bootstrap nodetoo
     nodetoo.bootstrap(app);
+
+    // bootstrap swagger
+    app.use(swagger.init(app, {
+      swaggerUI: './public/swagger/',
+      basePath: 'http://localhost:3000',
+      apis: ['./config/swagger/auth.yml', './config/swagger/mag.yml']
+    }));
+
     app.use(app.router);
     app.use(require('stylus').middleware(setting.root + '/public'));
   });
 
   app.configure('development', function(){
-    //swagger.bootstrap(app);
     app.use(express.errorHandler());
   });
 

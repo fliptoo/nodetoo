@@ -6,6 +6,13 @@ exports.before = function (req, res, next) {
 
 exports.actions = {
   
+  /**
+   * Home Page
+   * @api    private/public
+   * @param  {[type]} req
+   * @param  {[type]} res
+   * @return {[type]}
+   */
   index: function (req, res) {
     res.render('home/index');
   },
