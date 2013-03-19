@@ -85,14 +85,123 @@ Each folder under `controllers/` is a controller, `index.js` represent the js fi
 Let's take a look at the `controllers/home/index.js` file.
 
 ```js
-exports.index = function(req, res) {
-  var user = req.session.user;
-  res.render('home/index', {user: user});
-};
+exports.actions = {
+  
+  index: function (req, res) {
+    res.render('home/index');
+  },
 
-exports.about = function(req, res) {
-  res.render('home/about');
+  about: function (req, res) {
+    res.render('home/about');
+  },
+}
+```
+
+__Filters__ are middlewares that run before the action function.
+
+Exports as a function `before`.
+```js
+exports.before = function (req, res, next) {
+    
+  console.log('[BEFORE]: ' + req.url);
+  next();
+}
+
+exports.actions = {
+  
+  index: function (req, res) {
+    res.render('home/index');
+  }
+}
+```
+
+Exports as an object `before`, support [injection](#injections).
+
+```js
+exports.before = {
+  
+  all: [
+    {
+      middlewares: ['logger'],
+      except: ['login']
+    }
+  ],
+  only: [
+    { 
+      middlewares: ['watcher'],
+      actions: ['login']
+    }
+  ]
 };
+```
+```
+All actions will use `logger` except `login` action.
+Only `login` action will use `watcher`.
+```
+
+Define at action and it will be given priority.
+```js
+exports.actions = {
+  
+  index: {
+    before: ['watcher', 'logger'],
+    action: function (req, res) {
+      res.render('home/index');
+    }
+  }
+}
+```
+
+Here is the injections
+```
+config/
+    injections/
+        logger.js
+        watcher.js
+```
+
+__Roles__ are use in [Authentication](#authentication) process.
+
+Exports as an object `roles`.
+```js
+exports.roles = {
+
+  all: [
+    {
+      roles: ['*'],
+      except: ['login']
+    }
+  ],
+  only: [
+    {
+      roles: ['user'],
+      actions: ['createUser']
+    },
+    {
+      roles: ['admin'],
+      actions: ['createUser']
+    },
+  ]
+};
+```
+```
+All actions has role `*` except `login` action.
+Only `createUser` action has role `user`.
+Only `createUser` action has role `admin`.
+```
+PS: Role * apply to any roles, but it depend on how you write the authenticator.
+
+Define at action and it will be given priority.
+```js
+exports.actions = {
+  
+  index: {
+    roles: ['*'],
+    action: function (req, res) {
+      res.render('home/index');
+    }
+  }
+}
 ```
 
 ## Actions
@@ -110,47 +219,14 @@ Routes are defined in the `config/routes.js` file
 
 ```js
 module.exports = [
-// public routes  
-  { routes : [
-        ['/'        ,'get'  ,'home.index']
-      , ['/login'   ,'all'  ,'user.login']
-      , ['/logout'  ,'get'  ,'user.logout']
-  ]}
-
-// user with any roles
-, { roles  : ['*'],
-    routes : [
-        ['/anyone'  ,'get'  ,'anyone.index']
-  ]}
-
-// user with admin role only
-, { roles  : ['admin'],
-    routes : [
-        ['/admin'   ,'get' ,'admin.index']
-  ]}
-]
-```
-
-Middlewares can be use via [injection](#injections)
-
-```
-config/
-    injections/
-        check4name.js
-        check4age.js
-```
-
-```js
-module.exports = [
-  { routes : [
-        ['/'  ,'get'  ,'home.index', ['check4name', 'check4age']]
-  ]}
+    ['/'                        ,'get'  ,'home.index']
+  , ['/about'                   ,'get'  ,'home.about']
 ]
 ```
 
 ## Authentication
 
-When roles is configured in `routes.js`, {nodetoo} will ask for an authenticator via [injection](#injections).
+When roles is configured, {nodetoo} will ask for an authenticator via [injection](#injections).
 
 ```
 config/
@@ -192,16 +268,6 @@ var module = inject('module');
 ```
 
 PS: Actually nothing special with the injection, it is just a global function as `require`.
-
-## Plugins
-
-Any module under `plugins/` folder will be installed as a plugin.
-
-```
-config/
-    plugins/
-        extra.js
-```
 
 ## Examples
 
