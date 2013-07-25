@@ -33,10 +33,8 @@ program.template = 'jade';
 var routes = [
     ''
   , 'module.exports = ['
-  , '  { routes : ['
-  , '        [\'/\'                        ,\'get\'  ,\'home.index\']'
-  , '      , [\'/about\'                   ,\'get\'  ,\'home.about\']'
-  , '  ]}'
+  , '    [\'/\'                        ,\'get\'  ,\'home.index\']'
+  , '  , [\'/about\'                   ,\'get\'  ,\'home.about\']'
   , ']'
 ].join(eol);
 
@@ -58,13 +56,24 @@ var setting = [
 // Controller template
 var home = [
     ''
-  , 'exports.index = function(req, res){'
-  , '  res.render(\'home/index\')'
-  , '};'
+  , 'exports.before = function (req, res, next) {'
+  , '  console.log(\'[BEFORE]: \' + req.url);'
+  , '  next();'
+  , '}'
   , ''
-  , 'exports.about = function(req, res){'
-  , '  res.render(\'home/about\');'
-  , '};'
+  , 'exports.actions = {'
+  , ''
+  , '  index: function (req, res) {'
+  , '    res.render(\'home/index\');'
+  , '  },'
+  , ''
+  , '  about: {'
+  , '    action: function (req, res) {'
+  , '      res.render(\'home/about\');'
+  , '    }'
+  , '  }'
+  , '}'
+  , ''
 ].join(eol);
 
 // Jade main template
